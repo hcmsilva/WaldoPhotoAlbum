@@ -16,6 +16,7 @@ import com.demos.henrique.waldophotos.Listeners.ResultListener;
 import com.demos.henrique.waldophotos.Model.Album;
 import com.demos.henrique.waldophotos.Model.PhotoRecord;
 import com.demos.henrique.waldophotos.Networking.NetworkRequester;
+import com.demos.henrique.waldophotos.Networking.NetworkStateCheckerTask;
 import com.demos.henrique.waldophotos.Networking.Serialization.MyGsonTools;
 import com.demos.henrique.waldophotos.R;
 import com.demos.henrique.waldophotos.UI.Adapters.MyPhotoRecyclerViewAdapter;
@@ -29,7 +30,10 @@ import org.json.JSONObject;
  * Activities containing this fragment MUST implement the {@link OnListFragmentInteractionListener}
  * interface.
  */
-public class PhotoFragment extends Fragment implements AuthenticationListener, ResultListener{
+public class PhotoFragment extends Fragment implements
+        AuthenticationListener,
+        ResultListener,
+        NetworkStateCheckerTask.NetworkResponseListener{
 
     // Customize parameter argument names
     private static final String ARG_COLUMN_COUNT = "column-count";
@@ -55,8 +59,7 @@ public class PhotoFragment extends Fragment implements AuthenticationListener, R
     public PhotoFragment() {
     }
 
-    // TODO: Customize parameter initialization
-    @SuppressWarnings("unused")
+
     public static PhotoFragment newInstance(int columnCount, OnListFragmentInteractionListener hostActivity) {
         PhotoFragment fragment = new PhotoFragment();
         Bundle args = new Bundle();
@@ -75,10 +78,8 @@ public class PhotoFragment extends Fragment implements AuthenticationListener, R
             mColumnCount = getArguments().getInt(ARG_COLUMN_COUNT);
         }
 
-        mNetworkRequester = NetworkRequester.getInstance();
-        mNetworkRequester.authenticateNetworkRequester(this);
 
-        //photoItems = PokemonPhoto.dummyGenerator(200);
+        new NetworkStateCheckerTask(this).execute();
 
     }
 
@@ -164,18 +165,20 @@ public class PhotoFragment extends Fragment implements AuthenticationListener, R
         }
     }
 
-    /**
-     * This interface must be implemented by activities that contain this
-     * fragment to allow an interaction in this fragment to be communicated
-     * to the activity and potentially other fragments contained in that
-     * activity.
-     * <p/>
-     * See the Android Training lesson <a href=
-     * "http://developer.android.com/training/basics/fragments/communicating.html"
-     * >Communicating with Other Fragments</a> for more information.
-     */
+    @Override
+    public void receivedIsOnline(boolean isConnected) {
+
+        if(isConnected) {
+            mNetworkRequester = NetworkRequester.getInstance();
+            mNetworkRequester.authenticateNetworkRequester(this);
+        }
+        //else//------------>TODO
+         //   *********************;
+    }
+
+
     public interface OnListFragmentInteractionListener {
-        // TODO: Update argument type and name
+
         void onPhotoListFragmentInteraction(PhotoRecord item);
     }
 }

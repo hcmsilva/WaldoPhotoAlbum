@@ -6,29 +6,21 @@ import android.net.NetworkInfo;
 
 import java.io.IOException;
 
-/**
- * Created by henrique on 03-12-2016.
- */
+
+
 
 public class NetworkChecker {
 
-    public static boolean isConnected(Context ctx) {
+    public static boolean hasNetworkConnection(Context ctx) {
 
         ConnectivityManager cm = (ConnectivityManager) ctx.getSystemService(Context.CONNECTIVITY_SERVICE);
 
         NetworkInfo netInfo = cm.getActiveNetworkInfo();
 
         if(netInfo != null && netInfo.isConnectedOrConnecting())
-            try {
-                return hasAccessToInternet();
-            } catch (InterruptedException e) {
-                e.printStackTrace();
-            } catch (IOException e) {
-                e.printStackTrace();
-            }
-
-
-        return false;
+            return true;
+        else
+            return false;
     }
 
 
@@ -36,5 +28,24 @@ public class NetworkChecker {
     {
         String command = "ping -c 1 google.com";
         return (Runtime.getRuntime().exec (command).waitFor() == 0);
+    }
+
+
+    public static boolean isOnline(Context ctx)
+    {
+        try {
+
+            if(hasNetworkConnection(ctx)  && hasAccessToInternet())
+                return true;
+            else
+                return false;
+
+        } catch (InterruptedException e) {
+            e.printStackTrace();
+        } catch (IOException e) {
+            e.printStackTrace();
+        }
+
+        return false;
     }
 }
