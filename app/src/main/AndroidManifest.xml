@@ -1,3 +1,4 @@
+<?xml version="1.0" encoding="utf-8"?>
 <manifest xmlns:android="http://schemas.android.com/apk/res/android"
     package="com.demos.henrique.waldophotos">
 
@@ -13,7 +14,6 @@
 
         <activity
             android:name=".UI.Activities.WaldoActivity"
-            android:label="@string/title_activity_waldo"
             android:theme="@style/AppTheme.NoActionBar">
             <intent-filter>
                 <action android:name="android.intent.action.MAIN" />
