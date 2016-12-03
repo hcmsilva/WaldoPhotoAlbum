@@ -1,7 +1,8 @@
-package com.demos.henrique.waldophotos.Model.Networking;
+package com.demos.henrique.waldophotos.Networking;
 
 import android.os.AsyncTask;
-import com.demos.henrique.waldophotos.Model.Listeners.AuthenticationListener;
+
+import com.demos.henrique.waldophotos.Listeners.AuthenticationListener;
 import java.io.BufferedWriter;
 import java.io.IOException;
 import java.io.InputStream;
