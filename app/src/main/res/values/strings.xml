@@ -8,4 +8,10 @@
     <string name="album_title_str">"Album"</string>
     <string name="album_title_hashtag_str">"#album"</string>
     <string name="no_internet_user_notif">"No internet connection \nPlease swipe to refresh after getting a connection"</string>
+
+    <string name="auth_base_url_old">"https://auth.dev.waldo.photos/"</string>
+    <string name="auth_base_url">"https://auth.staging.waldo.photos/"</string>
+    <string name="graphql_query_url_old">"https://core-graphql.dev.waldo.photos/gql?query="</string>
+    <string name="graphql_base_query_url">"https://core-graphql.staging.waldo.photos/gql?query="</string>
+    <string name="album_id_new_version">"YWxidW06YTQwYzc5ODEtMzE1Zi00MWIyLTk5NjktMTI5NjIyZDAzNjA5"</string>
 </resources>
