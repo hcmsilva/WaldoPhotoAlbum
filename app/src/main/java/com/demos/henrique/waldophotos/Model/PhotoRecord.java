@@ -1,4 +1,4 @@
-package com.demos.henrique.waldophotos.Model.Model;
+package com.demos.henrique.waldophotos.Model;
 
 /**
  * Created by henrique on 29-11-2016.
