@@ -1,0 +1,35 @@
+<?xml version="1.0" encoding="utf-8"?>
+<RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    android:id="@+id/album_title_layout"
+    android:layout_width="match_parent" android:layout_height="?attr/actionBarSize">
+
+    <TextView
+        android:id="@+id/album_title_tv"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_marginTop="13dp"
+        android:layout_marginLeft="2dp"
+
+        android:text="@string/album_title_str"
+        />
+
+    <TextView
+        android:id="@+id/album_title_hashtag"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_below="@+id/album_title_tv"
+        android:layout_alignLeft="@+id/album_title_tv"
+        android:layout_marginTop="-5dp"
+        android:text="@string/album_title_hashtag_str"/>
+
+    <android.support.v7.widget.AppCompatImageView
+        android:id="@+id/add_user_icon"
+        android:layout_width="33dp"
+        android:layout_height="33dp"
+        android:layout_alignParentRight="true"
+        android:layout_marginTop="13dp"
+        android:layout_marginRight="20dp"
+        app:srcCompat="@drawable/waldo_icon"/>
+
+</RelativeLayout>

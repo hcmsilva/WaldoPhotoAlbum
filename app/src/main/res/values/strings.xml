@@ -1,3 +1,13 @@
 <resources>
     <string name="app_name">Waldo Photos</string>
+    <string name="title_activity_waldo">Album Details</string>
+    <string name="action_settings">Settings</string>
+    <string name="section_format">Hello World from section: %1$d</string>
+    <string name="matches_tab_title">"My Matches"</string>
+    <string name="all_photos_tab_title">"All Photos"</string>
+    <string name="album_title_str">"Album"</string>
+    <string name="album_title_hashtag_str">"#album"</string>
+
+    <!-- TODO: Remove or change this placeholder text -->
+    <string name="hello_blank_fragment">Hello blank fragment</string>
 </resources>

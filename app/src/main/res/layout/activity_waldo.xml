@@ -1,0 +1,88 @@
+<?xml version="1.0" encoding="utf-8"?>
+<android.support.design.widget.CoordinatorLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:id="@+id/main_content"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    android:fitsSystemWindows="true"
+    tools:context=".UI.Activities.WaldoActivity">
+
+    <android.support.design.widget.AppBarLayout
+        android:id="@+id/appbar"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:paddingTop="@dimen/appbar_padding_top"
+        android:theme="@style/AppTheme.AppBarOverlay">
+
+
+
+        <android.support.v7.widget.Toolbar
+            android:id="@+id/toolbar_top"
+            android:layout_width="match_parent"
+            android:layout_height="?attr/actionBarSize"
+            app:layout_scrollFlags="scroll|enterAlways"
+            app:popupTheme="@style/AppTheme.PopupOverlay"
+            >
+
+            <TextView
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:text="@string/title_activity_waldo"
+                android:layout_gravity="center"
+                android:id="@+id/toolbar_top_title"
+                android:textSize="21sp"
+                android:textStyle="normal"
+                android:textColor="@android:color/white"/>
+        </android.support.v7.widget.Toolbar>
+
+
+
+        <android.support.v7.widget.Toolbar
+            android:id="@+id/toolbar_bottom"
+            android:layout_width="match_parent"
+            android:layout_height="?attr/actionBarSize"
+            android:background="@android:color/background_light"
+            app:popupTheme="@style/AppTheme.PopupOverlay"
+            >
+            <include
+                android:id="@+id/toolbar_inside"
+                layout="@layout/album_title_toolbar"
+                app:layout_scrollFlags="scroll|enterAlways"
+                app:popupTheme="@style/AppTheme.PopupOverlay"/>
+        </android.support.v7.widget.Toolbar>
+
+        <View
+            android:layout_width="match_parent"
+            android:layout_height="2dp"
+            android:background="@drawable/stroke_drawable"
+            />
+
+        <android.support.design.widget.TabLayout
+            android:id="@+id/tabLayout"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:background="@android:color/background_light"
+            app:tabIndicatorColor="@android:color/tab_indicator_text"
+            app:tabSelectedTextColor="@android:color/tertiary_text_light"
+
+            app:tabTextAppearance="@android:style/TextAppearance.Widget.TabWidget"
+            />
+        <View
+            android:layout_width="match_parent"
+            android:layout_height="5dp"
+            android:layout_below="@+id/tabLayout"
+            android:background="@drawable/shadow_drawable" />
+
+
+    </android.support.design.widget.AppBarLayout>
+
+    <android.support.v4.view.ViewPager
+        android:id="@+id/view_pager"
+        android:layout_width="match_parent"
+        android:layout_height="match_parent"
+        app:layout_behavior="@string/appbar_scrolling_view_behavior" />
+
+
+
+</android.support.design.widget.CoordinatorLayout>
