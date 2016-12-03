@@ -163,8 +163,8 @@ public class PhotoFragment extends Fragment implements
 
         //query to get a specific album
         String graphQlQuery = "query{album(id:\"YWxidW06YTczOGUxODctNWY1MC00NmNiLTllZjUtMDgyZTYxMGFhYWY4\"){id,name,photos{records{id, urls{size_code, url}}}}}";
-
-        mNetworkRequester.getAlbum(graphQlQuery, this, authCookie);
+        if(authResult)
+            mNetworkRequester.getAlbum(graphQlQuery, this, authCookie);
         return authResult;
     }
 

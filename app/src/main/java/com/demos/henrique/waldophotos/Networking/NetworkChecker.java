@@ -26,7 +26,7 @@ public class NetworkChecker {
 
     public static boolean hasAccessToInternet() throws InterruptedException, IOException
     {
-        String command = "ping -c 1 google.com";
+        String command = "ping -c 1 -w 4 google.com";
         return (Runtime.getRuntime().exec (command).waitFor() == 0);
     }
 
