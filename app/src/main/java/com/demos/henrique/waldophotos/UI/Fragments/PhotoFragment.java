@@ -11,10 +11,14 @@ import android.view.View;
 import android.view.ViewGroup;
 
 import com.demos.henrique.waldophotos.Listeners.AuthenticationListener;
+import com.demos.henrique.waldophotos.Listeners.OnAlbumTitleReceivedListener;
 import com.demos.henrique.waldophotos.Listeners.ResultListener;
 import com.demos.henrique.waldophotos.Model.Album;
+import com.demos.henrique.waldophotos.Model.PhotoRecord;
 import com.demos.henrique.waldophotos.Networking.NetworkRequester;
+import com.demos.henrique.waldophotos.Networking.Serialization.MyGsonTools;
 import com.demos.henrique.waldophotos.R;
+import com.demos.henrique.waldophotos.UI.Adapters.MyPhotoRecyclerViewAdapter;
 
 import org.json.JSONException;
 import org.json.JSONObject;
