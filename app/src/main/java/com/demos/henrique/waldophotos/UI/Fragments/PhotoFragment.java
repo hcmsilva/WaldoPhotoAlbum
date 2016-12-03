@@ -1,14 +1,18 @@
 package com.demos.henrique.waldophotos.UI.Fragments;
 
 import android.content.Context;
+import android.content.res.Resources;
 import android.os.Bundle;
 import android.support.v4.app.Fragment;
+import android.support.v4.widget.SwipeRefreshLayout;
 import android.support.v7.widget.GridLayoutManager;
 import android.support.v7.widget.LinearLayoutManager;
 import android.support.v7.widget.RecyclerView;
+import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
+import android.widget.Toast;
 
 import com.demos.henrique.waldophotos.Listeners.AuthenticationListener;
 import com.demos.henrique.waldophotos.Listeners.OnAlbumTitleReceivedListener;
@@ -43,6 +47,7 @@ public class PhotoFragment extends Fragment implements
     private String albumPayload;
     NetworkRequester mNetworkRequester;
     RecyclerView recyclerView;
+    SwipeRefreshLayout mRefreshLayout;
 
     public void setmListener(OnListFragmentInteractionListener mListener) {
         this.mListener = mListener;
@@ -78,21 +83,25 @@ public class PhotoFragment extends Fragment implements
             mColumnCount = getArguments().getInt(ARG_COLUMN_COUNT);
         }
 
-
-        new NetworkStateCheckerTask(this).execute();
+        mAlbum = new Album();
 
     }
+
+
 
     @Override
     public View onCreateView(LayoutInflater inflater, ViewGroup container,
                              Bundle savedInstanceState) {
-        View view = inflater.inflate(R.layout.fragment_photo_list, container, false);
+
+        mRefreshLayout = (SwipeRefreshLayout) inflater.inflate(R.layout.fragment_photo_list, container, false);
+
+        RecyclerView view = (RecyclerView) mRefreshLayout.findViewById(R.id.list);
 
 
         // Set the adapter
-        if (view instanceof RecyclerView) {
+        if (view  != null) {
             Context context = view.getContext();
-            recyclerView = (RecyclerView) view;
+            recyclerView = view;
 
 
             if (mColumnCount <= 1)
@@ -101,11 +110,33 @@ public class PhotoFragment extends Fragment implements
             } else {
                 recyclerView.setLayoutManager(new GridLayoutManager(context, mColumnCount));
                 //recyclerView.setLayoutManager(new StaggeredGridLayoutManager( mColumnCount, StaggeredGridLayoutManager.VERTICAL));
+
             }
 
 
+            recyclerView.setAdapter(new MyPhotoRecyclerViewAdapter(mAlbum, mListener, getActivity()));
+            contentRefresh();
+            /*
+             * Sets up a SwipeRefreshLayout.OnRefreshListener that is invoked when the user
+             * performs a swipe-to-refresh gesture.
+             */
+            mRefreshLayout.setOnRefreshListener(
+                    new SwipeRefreshLayout.OnRefreshListener() {
+                        @Override
+                        public void onRefresh() {
+                            Log.i("", "onRefresh called from SwipeRefreshLayout");
+
+                            // This method performs the actual data-refresh operation.
+                            // The method calls setRefreshing(false) when it's finished.
+                            contentRefresh();
+                        }
+                    }
+            );
+
+
+
         }
-        return view;
+        return mRefreshLayout;
     }
 
 
@@ -130,12 +161,18 @@ public class PhotoFragment extends Fragment implements
     public boolean isAuthenticated(boolean authResult, String authCookie) {
         this.authCookie = authCookie;
 
-        mNetworkRequester.getAlbum("xxxxxxxx", this, authCookie);
+        //query to get a specific album
+        String graphQlQuery = "query{album(id:\"YWxidW06YTczOGUxODctNWY1MC00NmNiLTllZjUtMDgyZTYxMGFhYWY4\"){id,name,photos{records{id, urls{size_code, url}}}}}";
+
+        mNetworkRequester.getAlbum(graphQlQuery, this, authCookie);
         return authResult;
     }
 
     @Override
     public void getResult(String data) {
+
+
+
         this.albumPayload = data;
 
         //gson
@@ -156,14 +193,31 @@ public class PhotoFragment extends Fragment implements
 
 
             mAlbum = rslt;
+            ((MyPhotoRecyclerViewAdapter)recyclerView.getAdapter()).updateData(mAlbum);
 
-            recyclerView.setAdapter(new MyPhotoRecyclerViewAdapter(mAlbum, mListener, getActivity()));
+            //------------->>>>>>recyclerView.setAdapter(new MyPhotoRecyclerViewAdapter(mAlbum, mListener, getActivity()));
             ((OnAlbumTitleReceivedListener)mListener).albumTitleUpdate(mAlbum.getName());
 
         } catch (JSONException e) {
             e.printStackTrace();
         }
+
+        if (mRefreshLayout.isRefreshing())
+            mRefreshLayout.setRefreshing(false);
     }
+
+
+
+    private void contentRefresh() {
+
+        if(!mRefreshLayout.isRefreshing())
+        {
+            mRefreshLayout.setRefreshing(true);
+        }
+        //checks fr network availability and starts data update flow
+        new NetworkStateCheckerTask(this).execute();
+    }
+
 
     @Override
     public void receivedIsOnline(boolean isConnected) {
@@ -171,9 +225,16 @@ public class PhotoFragment extends Fragment implements
         if(isConnected) {
             mNetworkRequester = NetworkRequester.getInstance();
             mNetworkRequester.authenticateNetworkRequester(this);
+
+            recyclerView.setBackgroundResource(android.R.drawable.screen_background_light_transparent);
         }
-        //else//------------>TODO
-         //   *********************;
+        else {
+            Toast.makeText(getActivity(), R.string.no_internet_user_notif, Toast.LENGTH_LONG).show();
+
+            recyclerView.setBackgroundResource(R.drawable.refresh_512);
+
+            mRefreshLayout.setRefreshing(false);
+        }
     }
 
 

@@ -86,6 +86,12 @@ public class MyPhotoRecyclerViewAdapter extends RecyclerView.Adapter<MyPhotoRecy
         return mRecords.size();
     }
 
+    public void updateData(Album mAlbum) {
+
+        this.mAlbum = mAlbum;
+        this.mRecords = mAlbum.getPhotos();
+        notifyDataSetChanged();
+    }
 
 
     public class ViewHolder extends RecyclerView.ViewHolder {

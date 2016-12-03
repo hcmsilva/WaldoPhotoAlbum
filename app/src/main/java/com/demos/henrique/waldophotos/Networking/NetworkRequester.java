@@ -34,25 +34,28 @@ public class NetworkRequester implements com.demos.henrique.waldophotos.Listener
         new AuthenticationTask(authenticationListener, this).execute(url);
     }
 
-    public void getAlbum(String query, ResultListener mListener, String authCookie)
+    public void getAlbum(String graphQlQuery, ResultListener mListener, String authCookie)
     {
 
         String requestUrl = "";
-        final String qHardcoded = "https://core-graphql.dev.waldo.photos/gql?query=query%7Balbum(id%3A%22YWxidW06YTczOGUxODctNWY1MC00NmNiLTllZjUtMDgyZTYxMGFhYWY4%22)%7Bid%2Cname%2Cphotos%7Brecords%7Bid%7D%7D%7D%7D";
-        final String baseUrl = "https://core-graphql.dev.waldo.photos/gql?query=";
-        final String q = "query{album(id:\"YWxidW06YTczOGUxODctNWY1MC00NmNiLTllZjUtMDgyZTYxMGFhYWY4\"){id,name,photos{records{id, urls{size_code, url}}}}}";
 
-        //final String q = "query{album(id:\"YWxidW06YTczOGUxODctNWY1MC00NmNiLTllZjUtMDgyZTYxMGFhYWY4\"){id,name}}";
+        //for debug
+        //final String qHardcoded = "https://core-graphql.dev.waldo.photos/gql?query=query%7Balbum(id%3A%22YWxidW06YTczOGUxODctNWY1MC00NmNiLTllZjUtMDgyZTYxMGFhYWY4%22)%7Bid%2Cname%2Cphotos%7Brecords%7Bid%7D%7D%7D%7D";
+        //final String q2 = "query{album(id:\"YWxidW06YTczOGUxODctNWY1MC00NmNiLTllZjUtMDgyZTYxMGFhYWY4\"){id,name}}";
+
+
+        final String baseUrl = "https://core-graphql.dev.waldo.photos/gql?query=";
+
         try {
-            requestUrl = baseUrl+URLEncoder.encode(q, "UTF-8");
+            requestUrl = baseUrl+URLEncoder.encode(graphQlQuery, "UTF-8");
         } catch (UnsupportedEncodingException e) {
             e.printStackTrace();
         }
 
         String[] tmp = authCookie.split("; ");
 
-        // cookie that works: "_ga=GA1.2.1758442781.1480356821; __dev.waldo.auth__=eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJhY2NvdW50X2lkIjoiYmZmNjNkNDYtMjYzZS00ZDBkLThmYjQtMjJhMjA3ZTBjZDFmIiwicm9sZXMiOlsiYWRtaW5pc3RyYXRvciJdLCJpc3MiOiJ3YWxkbzpjb3JlIiwiZ3JhbnRzIjpbImFsYnVtczpkZWxldGU6KiIsImFsYnVtczpjcmVhdGU6KiIsImFsYnVtczplZGl0OioiLCJhbGJ1bXM6dmlldzoqIl0sImV4cCI6MTQ4Mjk3MTM0MSwiaWF0IjoxNDgwMzc5MzQxfQ.j_O4Jm2Jx5vcC6vx29K4B_C3VpZ8h5LpZyQZy-cRBqI"
-        new RequesterTask(mListener).execute(requestUrl, tmp[0]);//authCookie);
+
+        new RequesterTask(mListener).execute(requestUrl, tmp[0]);
 
 
         return ;

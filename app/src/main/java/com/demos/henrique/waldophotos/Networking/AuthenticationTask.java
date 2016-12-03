@@ -46,8 +46,8 @@ public class AuthenticationTask extends AsyncTask<String, String, Boolean> {
 
             URL url = new URL(params[0]);
             HttpsURLConnection conn = (HttpsURLConnection) url.openConnection();
-            conn.setReadTimeout(10000);
-            conn.setConnectTimeout(15000);
+            conn.setReadTimeout(5000);
+            conn.setConnectTimeout(4000);
             conn.setInstanceFollowRedirects( false );
             conn.setRequestMethod( "POST" );
             conn.setRequestProperty( "Content-Type", "application/x-www-form-urlencoded");
