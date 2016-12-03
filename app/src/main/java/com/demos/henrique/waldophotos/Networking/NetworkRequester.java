@@ -15,8 +15,9 @@ public class NetworkRequester implements com.demos.henrique.waldophotos.Listener
 
     private static NetworkRequester singleton = new NetworkRequester();
     private static boolean authenticated = false;
-    //private static OkHttpClient httpClient;
-    private final static String url = "https://auth.dev.waldo.photos/";
+
+
+
     private static String authCookie;
 
     private NetworkRequester()
@@ -29,12 +30,12 @@ public class NetworkRequester implements com.demos.henrique.waldophotos.Listener
             return singleton;
     }
 
-    public void authenticateNetworkRequester(AuthenticationListener authenticationListener)
+    public void authenticateNetworkRequester(AuthenticationListener authenticationListener, String authBaseUrl)
     {
-        new AuthenticationTask(authenticationListener, this).execute(url);
+        new AuthenticationTask(authenticationListener, this).execute(authBaseUrl);
     }
 
-    public void getAlbum(String graphQlQuery, ResultListener mListener, String authCookie)
+    public void getAlbum(String graphQlQuery, ResultListener mListener, String authCookie, String baseQueryUrl)
     {
 
         String requestUrl = "";
@@ -44,7 +45,7 @@ public class NetworkRequester implements com.demos.henrique.waldophotos.Listener
         //final String q2 = "query{album(id:\"YWxidW06YTczOGUxODctNWY1MC00NmNiLTllZjUtMDgyZTYxMGFhYWY4\"){id,name}}";
 
 
-        final String baseUrl = "https://core-graphql.dev.waldo.photos/gql?query=";
+        final String baseUrl = baseQueryUrl;
 
         try {
             requestUrl = baseUrl+URLEncoder.encode(graphQlQuery, "UTF-8");
@@ -52,10 +53,12 @@ public class NetworkRequester implements com.demos.henrique.waldophotos.Listener
             e.printStackTrace();
         }
 
-        String[] tmp = authCookie.split("; ");
+        String[] croppedCookie = null;
+        if(authCookie != null && !authCookie.isEmpty())
+            croppedCookie = authCookie.split("; ");
 
 
-        new RequesterTask(mListener).execute(requestUrl, tmp[0]);
+        new RequesterTask(mListener).execute(requestUrl, croppedCookie[0]);
 
 
         return ;

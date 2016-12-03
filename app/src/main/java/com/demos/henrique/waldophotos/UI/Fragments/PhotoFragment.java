@@ -1,7 +1,6 @@
 package com.demos.henrique.waldophotos.UI.Fragments;
 
 import android.content.Context;
-import android.content.res.Resources;
 import android.os.Bundle;
 import android.support.v4.app.Fragment;
 import android.support.v4.widget.SwipeRefreshLayout;
@@ -21,6 +20,7 @@ import com.demos.henrique.waldophotos.Model.Album;
 import com.demos.henrique.waldophotos.Model.PhotoRecord;
 import com.demos.henrique.waldophotos.Networking.NetworkRequester;
 import com.demos.henrique.waldophotos.Networking.NetworkStateCheckerTask;
+import com.demos.henrique.waldophotos.Networking.Serialization.GraphQLTools;
 import com.demos.henrique.waldophotos.Networking.Serialization.MyGsonTools;
 import com.demos.henrique.waldophotos.R;
 import com.demos.henrique.waldophotos.UI.Adapters.MyPhotoRecyclerViewAdapter;
@@ -162,9 +162,14 @@ public class PhotoFragment extends Fragment implements
         this.authCookie = authCookie;
 
         //query to get a specific album
-        String graphQlQuery = "query{album(id:\"YWxidW06YTczOGUxODctNWY1MC00NmNiLTllZjUtMDgyZTYxMGFhYWY4\"){id,name,photos{records{id, urls{size_code, url}}}}}";
+        String albumId = getString(R.string.album_id_new_version);
+
+        String graphQlQuery = GraphQLTools.queryBuilderForAlbum(albumId, 0, 50);
+
+
+
         if(authResult)
-            mNetworkRequester.getAlbum(graphQlQuery, this, authCookie);
+            mNetworkRequester.getAlbum(graphQlQuery, this, authCookie, getString(R.string.graphql_base_query_url));
         return authResult;
     }
 
@@ -224,7 +229,7 @@ public class PhotoFragment extends Fragment implements
 
         if(isConnected) {
             mNetworkRequester = NetworkRequester.getInstance();
-            mNetworkRequester.authenticateNetworkRequester(this);
+            mNetworkRequester.authenticateNetworkRequester(this, getString(R.string.auth_base_url));
 
             recyclerView.setBackgroundResource(android.R.drawable.screen_background_light_transparent);
         }
