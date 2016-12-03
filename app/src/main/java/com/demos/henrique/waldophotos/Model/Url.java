@@ -1,19 +1,18 @@
-package com.demos.henrique.waldophotos.Model;
+package com.demos.henrique.waldophotos.Model.Model;
 import com.google.gson.annotations.Expose;
 import com.google.gson.annotations.SerializedName;
 
-/**
- * Created by henrique on 29-11-2016.
- */
+
+
 
 public class Url {
 
     @SerializedName("size_code")
     @Expose
-    public String sizeCode;
+    private String sizeCode;
     @SerializedName("url")
     @Expose
-    public String url;
+    private String url;
 
     /**
      *

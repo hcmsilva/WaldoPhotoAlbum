@@ -1,4 +1,4 @@
-package com.demos.henrique.waldophotos.Model;
+package com.demos.henrique.waldophotos.Model.Model;
 
 
 import com.google.gson.annotations.Expose;
