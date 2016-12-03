@@ -12,7 +12,9 @@ public class GraphQLTools {
                 "  album(id: \""+albumId+"\") {\n" +
                 "    id\n" +
                 "    name\n" +
+                "    updated_at\n" +
                 "    photos(slice: { limit: "+limit+", offset: "+offSet+" }) {\n" +
+                "      total\n" +
                 "      records {\n" +
                 "        id\n" +
                 "        urls {\n" +

@@ -25,7 +25,9 @@ public class MyGsonTools<T> {
 
             String id = albumData.getString("id");
             String name = albumData.getString("name");
+            String albumUpdatedAt = albumData.getString("updated_at");
             JSONObject photosJson = albumData.getJSONObject("photos");
+            int totalAlbumPhotos = photosJson.getInt("total");
 
             JSONArray recordsJsonArray = photosJson.getJSONArray("records");
             Type entityTypePhotoRecord = new TypeToken<List<PhotoRecord>>(){}.getType();
@@ -42,7 +44,7 @@ public class MyGsonTools<T> {
             }
 
 
-            Album alb = new Album(id, name, photoRecordListEntity);
+            Album alb = new Album(id, name, photoRecordListEntity, albumUpdatedAt, totalAlbumPhotos);
             alb.getId();
 
             //Album entity = new Gson().fromJson(json.toString(), entityType);
