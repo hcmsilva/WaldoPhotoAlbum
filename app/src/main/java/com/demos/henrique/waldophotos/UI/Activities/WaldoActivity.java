@@ -19,8 +19,12 @@ import android.widget.ImageView;
 import android.widget.TextView;
 
 import com.demos.henrique.waldophotos.Listeners.OnAlbumTitleReceivedListener;
+import com.demos.henrique.waldophotos.Listeners.OnMyTabSelectedListener;
+import com.demos.henrique.waldophotos.Model.PhotoRecord;
 import com.demos.henrique.waldophotos.R;
 import com.demos.henrique.waldophotos.UI.Adapters.SimplePagerAdapter;
+import com.demos.henrique.waldophotos.UI.Fragments.BlankFragment;
+import com.demos.henrique.waldophotos.UI.Fragments.PhotoFragment;
 
 import java.util.ArrayList;
 import java.util.List;
