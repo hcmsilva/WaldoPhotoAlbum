@@ -26,7 +26,9 @@ public class Album {
 
     @SerializedName("total")
     @Expose
-    public int numberOfPhotoRecords;
+    public int total;
+
+
 
     public Album(String id, String name, List<PhotoRecord> photoRecordList) {
 
@@ -35,10 +37,10 @@ public class Album {
         this.photos = photoRecordList;
     }
 
-    public Album(String id, String name, List<PhotoRecord> photoRecordList, String albumUpdateDate, int numberOfPhotoRecords) {
+    public Album(String id, String name, List<PhotoRecord> photoRecordList, String albumUpdateDate, int totalPhotoRecords) {
         this(id, name, photoRecordList);
         this.updated_at = albumUpdateDate;
-        this.numberOfPhotoRecords = numberOfPhotoRecords;
+        this.total = totalPhotoRecords;
 
     }
 
@@ -47,7 +49,7 @@ public class Album {
         this.id = "";
         this.name = "";
         this.photos = new ArrayList<>();
-        this.numberOfPhotoRecords = 0;
+        this.total = 0;
         this.updated_at = "";
     };
 
@@ -117,12 +119,12 @@ public class Album {
         this.updated_at = updated_at;
     }
 
-    public int getNumberOfPhotoRecords() {
-        return numberOfPhotoRecords;
+    public int getTotal() {
+        return total;
     }
 
-    public void setNumberOfPhotoRecords(int numberOfPhotoRecords) {
-        this.numberOfPhotoRecords = numberOfPhotoRecords;
+    public void setTotal(int total) {
+        this.total = total;
     }
 
 }

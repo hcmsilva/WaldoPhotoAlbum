@@ -48,7 +48,7 @@ public class NetworkRequester implements com.demos.henrique.waldophotos.Listener
         final String baseUrl = baseQueryUrl;
 
         try {
-            requestUrl = baseUrl+URLEncoder.encode(graphQlQuery, "UTF-8");
+            requestUrl = baseUrl + URLEncoder.encode(graphQlQuery, "UTF-8");
         } catch (UnsupportedEncodingException e) {
             e.printStackTrace();
         }

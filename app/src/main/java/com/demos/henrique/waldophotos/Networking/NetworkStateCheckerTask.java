@@ -1,31 +1,33 @@
 package com.demos.henrique.waldophotos.Networking;
 
-import android.app.Fragment;
 import android.content.Context;
 import android.os.AsyncTask;
+import android.support.v4.app.Fragment;
 
 
 
 
 public class NetworkStateCheckerTask extends AsyncTask<Boolean, String, Boolean> {
 
-    private NetworkResponseListener hostFragment;
+    private NetworkResponseListener networkResponseListener;
+    private Context hostContext;
 
-    public NetworkStateCheckerTask(NetworkResponseListener context)
+    public NetworkStateCheckerTask(NetworkResponseListener networkResponseListener, Context ctx)
     {
-        hostFragment = context;
+        this.networkResponseListener = networkResponseListener;
+        hostContext = ctx;
     }
 
     @Override
     protected Boolean doInBackground(Boolean... params) {
-        return NetworkChecker.isOnline( ((android.support.v4.app.Fragment)hostFragment).getActivity() );
+        return NetworkChecker.isOnline( hostContext );
     }
 
 
     @Override
     protected void onPostExecute(Boolean result)
     {
-        hostFragment.receivedIsOnline(result);
+        networkResponseListener.receivedIsOnline(result);
     }
 
 

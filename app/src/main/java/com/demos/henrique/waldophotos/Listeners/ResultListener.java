@@ -5,5 +5,6 @@ package com.demos.henrique.waldophotos.Listeners;
  */
 
 public interface ResultListener {
+
     void getResult(String data);
 }

@@ -18,9 +18,11 @@ public class RequesterTask extends AsyncTask<String, String, String> {
 
     ResultListener mListener;
 
+
     public RequesterTask(ResultListener listener) {
         super();
         mListener = listener;
+
 
     }
 
@@ -37,9 +39,11 @@ public class RequesterTask extends AsyncTask<String, String, String> {
             URL url = new URL(params[0]);
             //URL url = new URL("https://core-graphql.dev.waldo.photos/gql?query=%7Balbum(id%3A%20%22YWxidW06YTczOGUxODctNWY1MC00NmNiLTllZjUtMDgyZTYxMGFhYWY4%22)%7Bid%2C%0A%20%20%20%20name%2C%0A%20%20%20%20photos%20%7B%0A%20%20%20%20%20%20records%20%7B%0A%20%20%20%20%20%20%20urls%20%7B%0A%20%20%20%20%20%20%20%20size_code%0A%20%20%20%20%20%20%20%20url%0A%20%20%20%20%20%20%20%20width%0A%20%20%20%20%20%20%20%20height%0A%20%20%20%20%20%20%20%20quality%0A%20%20%20%20%20%20%20%20mime%0A%20%20%20%20%20%20%7D%20%0A%20%20%20%20%20%20%7D%0A%20%20%20%20%7D%7D%7D");
             HttpsURLConnection conn = (HttpsURLConnection) url.openConnection();
-            //conn.
-            conn.setReadTimeout(30000);
-            conn.setConnectTimeout(20000);
+
+
+            //// TODO: 04-12-2016 --> recheck timeout values
+            conn.setReadTimeout(10000);
+            conn.setConnectTimeout(6000);
             conn.setInstanceFollowRedirects( true );
             conn.setRequestMethod( "GET" );
             conn.setRequestProperty( "Cookie", params[1]);
@@ -58,7 +62,7 @@ public class RequesterTask extends AsyncTask<String, String, String> {
             
             //payload = readIt(is, payloadSize);
             payload = readItLowLevel(is, payloadSize);
-////*****************************************
+
 
 
         } catch (Exception e) {

@@ -14,6 +14,7 @@ import android.view.ViewGroup;
 import android.widget.Toast;
 
 import com.demos.henrique.waldophotos.Listeners.AuthenticationListener;
+import com.demos.henrique.waldophotos.Listeners.EndOfSliceListener;
 import com.demos.henrique.waldophotos.Listeners.OnAlbumTitleReceivedListener;
 import com.demos.henrique.waldophotos.Listeners.ResultListener;
 import com.demos.henrique.waldophotos.Model.Album;
@@ -37,7 +38,8 @@ import org.json.JSONObject;
 public class PhotoFragment extends Fragment implements
         AuthenticationListener,
         ResultListener,
-        NetworkStateCheckerTask.NetworkResponseListener{
+        NetworkStateCheckerTask.NetworkResponseListener,
+        EndOfSliceListener{
 
     // Customize parameter argument names
     private static final String ARG_COLUMN_COUNT = "column-count";
@@ -54,6 +56,7 @@ public class PhotoFragment extends Fragment implements
     }
 
     private OnListFragmentInteractionListener mListener;
+    boolean resetCurrentDataSet = true;
 
     private Album mAlbum;
 
@@ -114,12 +117,10 @@ public class PhotoFragment extends Fragment implements
             }
 
 
-            recyclerView.setAdapter(new MyPhotoRecyclerViewAdapter(mAlbum, mListener, getActivity()));
-            contentRefresh();
-            /*
-             * Sets up a SwipeRefreshLayout.OnRefreshListener that is invoked when the user
-             * performs a swipe-to-refresh gesture.
-             */
+            recyclerView.setAdapter(new MyPhotoRecyclerViewAdapter(mAlbum, mListener, getActivity(), this));
+            contentRefreshBySwipe();
+
+
             mRefreshLayout.setOnRefreshListener(
                     new SwipeRefreshLayout.OnRefreshListener() {
                         @Override
@@ -128,7 +129,7 @@ public class PhotoFragment extends Fragment implements
 
                             // This method performs the actual data-refresh operation.
                             // The method calls setRefreshing(false) when it's finished.
-                            contentRefresh();
+                            contentRefreshBySwipe();
                         }
                     }
             );
@@ -194,13 +195,18 @@ public class PhotoFragment extends Fragment implements
             JSONObject argTmp  = jsonObjectAlbum.getJSONObject("data");
             String argTmp2  = argTmp.getString("album");
 
-            Album rslt = myGsonTools.getModelFromJSON(argTmp2);
+            Album newAlbum = myGsonTools.getModelFromJSON(argTmp2);
 
 
-            mAlbum = rslt;
-            ((MyPhotoRecyclerViewAdapter)recyclerView.getAdapter()).updateData(mAlbum);
+            if(resetCurrentDataSet)
+            {
+                mAlbum = newAlbum;
+                ((MyPhotoRecyclerViewAdapter) recyclerView.getAdapter()).resetAndUpdateData(mAlbum);
+            }
+            else {
+                ((MyPhotoRecyclerViewAdapter) recyclerView.getAdapter()).takeMoreData(newAlbum);
+            }
 
-            //------------->>>>>>recyclerView.setAdapter(new MyPhotoRecyclerViewAdapter(mAlbum, mListener, getActivity()));
             ((OnAlbumTitleReceivedListener)mListener).albumTitleUpdate(mAlbum.getName());
 
         } catch (JSONException e) {
@@ -209,18 +215,22 @@ public class PhotoFragment extends Fragment implements
 
         if (mRefreshLayout.isRefreshing())
             mRefreshLayout.setRefreshing(false);
+
+        resetCurrentDataSet = false;
     }
 
 
 
-    private void contentRefresh() {
+    private void contentRefreshBySwipe() {
+
+        resetCurrentDataSet = true;
 
         if(!mRefreshLayout.isRefreshing())
         {
             mRefreshLayout.setRefreshing(true);
         }
         //checks fr network availability and starts data update flow
-        new NetworkStateCheckerTask(this).execute();
+        new NetworkStateCheckerTask(this, getContext()).execute();
     }
 
 
@@ -240,6 +250,36 @@ public class PhotoFragment extends Fragment implements
 
             mRefreshLayout.setRefreshing(false);
         }
+    }
+
+    @Override
+    public void loadMorePhotos() {
+
+
+        final String graphQlQueryStr = GraphQLTools.queryBuilderForAlbum(mAlbum.getId(), mAlbum.getPhotos().size(), 50);
+        final ResultListener hostFrag = this;
+        if (mNetworkRequester != null)
+            new NetworkStateCheckerTask(
+                    new NetworkStateCheckerTask.NetworkResponseListener() {
+                        @Override
+                        public void receivedIsOnline(boolean isConnected) {
+                            if (isConnected) {
+                                mNetworkRequester.getAlbum(graphQlQueryStr, hostFrag, authCookie, getString(R.string.graphql_base_query_url));
+                                recyclerView.setBackgroundResource(android.R.drawable.screen_background_light_transparent);
+                            } else {
+                                Toast.makeText(((Fragment) hostFrag).getContext(), ((Fragment) hostFrag).getString(R.string.no_internet_user_notif), Toast.LENGTH_LONG).show();
+                                recyclerView.setBackgroundResource(R.drawable.refresh_512);
+                            }
+                        }
+            },
+            getContext()
+            ).execute();
+
+
+
+
+
+        return;
     }
 
 

@@ -16,6 +16,7 @@ import android.view.WindowManager;
 import android.widget.ImageView;
 import android.widget.RelativeLayout;
 
+import com.demos.henrique.waldophotos.Listeners.EndOfSliceListener;
 import com.demos.henrique.waldophotos.Model.Album;
 import com.demos.henrique.waldophotos.Model.PhotoRecord;
 import com.demos.henrique.waldophotos.R;
@@ -36,13 +37,14 @@ public class MyPhotoRecyclerViewAdapter extends RecyclerView.Adapter<MyPhotoRecy
     private final PhotoFragment.OnListFragmentInteractionListener mListener;
     private DisplayMetrics mDMetrics = new DisplayMetrics();
     private Activity hostActivity;
+    private EndOfSliceListener endOfSliceLoader;
 
-    public MyPhotoRecyclerViewAdapter(Album album, PhotoFragment.OnListFragmentInteractionListener listener, Activity hostAct) {
+    public MyPhotoRecyclerViewAdapter(Album album, PhotoFragment.OnListFragmentInteractionListener listener, Activity hostAct, EndOfSliceListener endOfSliceLoader) {
         mAlbum = album;
         mListener = listener;
-        //mRecords = mAlbum.getPhotos();
         mRecords = mAlbum.getPhotos();
         this.hostActivity = hostAct;
+        this.endOfSliceLoader = endOfSliceLoader;
 
 
     }
@@ -69,16 +71,9 @@ public class MyPhotoRecyclerViewAdapter extends RecyclerView.Adapter<MyPhotoRecy
 
         Picasso.with(((Context) mListener)).load(((PhotoRecord)holder.mItem).getLargeImage().getUrl()).resize(350,350).centerCrop().into(holder.mImageView);
 
-        /*holder.mView.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View v) {
-                if (null != mListener) {
-                    // Notify the active callbacks interface (the activity, if the
-                    // fragment is attached to one) that an item has been selected.
-                    mListener.onPhotoListFragmentInteraction(holder.mItem);
-                }
-            }
-        });*/
+
+        if( (position == (mRecords.size()-1))  &&  position != mAlbum.total)
+            endOfSliceLoader.loadMorePhotos();
     }
 
     @Override
@@ -86,11 +81,20 @@ public class MyPhotoRecyclerViewAdapter extends RecyclerView.Adapter<MyPhotoRecy
         return mRecords.size();
     }
 
-    public void updateData(Album mAlbum) {
+    public void resetAndUpdateData(Album mAlbum) {
 
         this.mAlbum = mAlbum;
         this.mRecords = mAlbum.getPhotos();
         notifyDataSetChanged();
+    }
+
+    public void takeMoreData(Album newAlbum) {
+
+
+        mAlbum.getPhotos().addAll(newAlbum.getPhotos());
+
+        notifyItemRangeInserted(mRecords.size(), newAlbum.getPhotos().size());
+
     }
 
 
